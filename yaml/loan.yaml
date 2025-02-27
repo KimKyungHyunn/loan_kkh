@@ -1,0 +1,37 @@
+# springboot-app.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loan-kkh
+  namespace: group1-team7
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loan-kkh
+  template:
+    metadata:
+      labels:
+        app: loan-kkh
+    spec:
+      containers:
+      - name: loan-kkh
+        image: k8s-vga-worker1:5000/team7-loan-kkh:latest
+        imagePullPolicy: Always #IfNotPresent
+        ports:
+        - containerPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loan-kkh
+  namespace: group1-team7
+spec:
+  selector:
+    app: loan-kkh
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8083
+      nodePort: 30745
+  type: NodePort
